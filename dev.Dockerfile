@@ -2,12 +2,15 @@ FROM ruby:3.2
 
 RUN apt update && \
     apt install -yq \
-        nodejs \
-        yarn \
         postgresql-client \
-        vim
+        vim \
+        build-essential
 
-RUN gem install rails
+# Node & Yarn
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install -yq yarn
 
 WORKDIR /app
 
