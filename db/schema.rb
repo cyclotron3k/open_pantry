@@ -63,6 +63,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_064543) do
   end
 
   add_foreign_key "line_items", "products"
-  add_foreign_key "orders", "users", column: "user_id"
-  add_foreign_key "products", "users", column: "user_id"
+  add_foreign_key "orders", "users"
+  add_foreign_key "products", "users"
 end
