@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASS"] %>
+  host: <%= ENV["DB_HOST"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: open_pantry_direct_development
+
+test:
+  <<: *default
+  database: open_pantry_direct_test
+
+production:
+  <<: *default
+  database: open_pantry_direct_production

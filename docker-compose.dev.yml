@@ -1,0 +1,70 @@
+# Rails: docker-compose -f docker-compose.dev.yml --profile rails up --build
+# Rails tests: docker-compose -f docker-compose.dev.yml run open-pantry-rails-test
+
+version: '3.9'
+
+services:
+
+  open-pantry-postgres:
+    image: postgres:latest
+    restart: on-failure
+    environment:
+      POSTGRES_DB: open_pantry_direct_development
+      POSTGRES_PASSWORD: open-pantry-password
+      POSTGRES_USER: postgres
+    volumes:
+      - open-pantry-postgres-data:/var/lib/postgresql/data
+    # ports:
+    #   - 127.0.0.1:5432:5432
+
+  open-pantry-rails:
+    # platform: linux/amd64
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    profiles:
+      - rails
+    environment:
+      RAILS_ENV: development
+      DB_USER: postgres
+      DB_PASS: open-pantry-password
+      DB_HOST: open-pantry-postgres
+    command:
+      - bash
+      - "-c"
+      - "rm -f tmp/pids/server.pid && bundle install && bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec rails server -b '0.0.0.0'"
+    depends_on:
+      - open-pantry-postgres
+    volumes:
+      - ruby-3-2-gems:/usr/local/bundle
+      - .:/app
+    ports:
+      - 127.0.0.1:3000:3000
+
+  open-pantry-rails-test:
+    # platform: linux/amd64
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    profiles:
+      - rails-test
+    environment:
+      RAILS_ENV: test
+      DB_USER: postgres
+      DB_PASS: open-pantry-password
+      DB_HOST: open-pantry-postgres
+    command:
+      - bash
+      - "-c"
+      - "bundle install && bundle exec rspec"
+    depends_on:
+      - open-pantry-postgres
+    volumes:
+      - ruby-3-2-gems:/usr/local/bundle
+      - .:/app
+
+volumes:
+  open-pantry-postgres-data:
+    driver: local
+  ruby-3-2-gems:
+    driver: local
