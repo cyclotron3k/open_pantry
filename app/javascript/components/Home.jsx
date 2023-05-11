@@ -6,15 +6,9 @@ export default () => (
     <div className="jumbotron jumbotron-fluid bg-transparent">
       <div className="container secondary-color">
         <h1 className="display-4">Open Pantry Market Place</h1>
-        <p className="lead">
-          Buy and sell your wares
-        </p>
+        <p className="lead">Buy and sell your wares</p>
         <hr className="my-4" />
-        <Link
-          to="/products"
-          className="btn btn-lg custom-button"
-          role="button"
-        >
+        <Link to="/products" className="btn btn-lg custom-button" role="button">
           View Produce
         </Link>
       </div>

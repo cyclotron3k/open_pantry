@@ -15,9 +15,6 @@ Rails.application.routes.draw do
       delete 'products/destroy/:id', to: 'products#destroy'
     end
   end
-  # resources :line_items
-  # resources :orders
-  # resources :products
   devise_for :users
   root 'homepage#index'
   get '/*path' => 'homepage#index'

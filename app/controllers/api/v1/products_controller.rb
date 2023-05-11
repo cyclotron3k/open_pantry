@@ -1,4 +1,7 @@
 class Api::V1::ProductsController < ApplicationController
+
+  before_action :authenticate_user!
+
   def index
     product = Product.all.order(title: :desc)
     render json: product, include: :user
